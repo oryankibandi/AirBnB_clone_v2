@@ -115,17 +115,40 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        if not args:
-            print("** class name missing **")
-            return
-        elif args not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
-        print(new_instance.id)
-        storage.save()
+        try:
+            if not args:
+                raise SyntaxError()
 
+            arg_list = args.split(" ")
+            if arg_list:
+                cls = arg_list[0]
+
+            if not cls:
+                print("** class name missing **")
+                return
+            elif cls not in HBNBCommand.classes:
+                print("** class doesn't exist **")
+                return
+
+            kwargs_list = arg_list[1:]
+            params = {}
+            print('kwargs_list: {}'.format(kwargs_list))
+            for item in kwargs_list:
+                key, val = item.split("=")
+                if self.check_int(val):
+                    params[key] = int(val)
+                elif self.check_float(val):
+                    params[key] = float(val)
+                else:
+                    val = val.replace('_', ' ')
+                    params[key] = val.split('"\'')
+
+            new_instance = HBNBCommand.classes[cls](**params)
+            storage.save()
+            print(new_instance.id)
+            storage.save()
+        except SyntaxError:
+            print("** class name missing **")
     def help_create(self):
         """ Help information for the create method """
         print("Creates a class of any type")
@@ -319,6 +342,22 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+    
+    @staticmethod
+    def check_int(val):
+        try:
+            int(val)
+            return True
+        except ValueError:
+            return False
+
+    @staticmethod
+    def check_float(val):
+        try:
+            float(val)
+            return True
+        except ValueError:
+            return False
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
