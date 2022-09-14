@@ -14,7 +14,7 @@ class FileStorage:
         if cls is not None:
             cls_list = {}
             for key, val in self.__objects.items():
-                if type(val) == cls:
+                if key.split(".")[0] == cls.__name__:
                     cls_list[key] = val
             return cls_list
 
