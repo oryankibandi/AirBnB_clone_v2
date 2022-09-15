@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from models.base_model import BaseModel
 from models.base_model import Base
-from models.users import User
+from models.user import User
 from models.state import State
 from models.review import Review
 from models.place import Place
@@ -23,13 +23,13 @@ class DBStorage:
     def __init__(self):
         """Initializes engine"""
         self.__engine = create_engine("mysql+mysqldb://{}:{}@{}/{}"
-                                      .format(gevenv("HBNB_MYSQL_USER"),
+                                      .format(getenv("HBNB_MYSQL_USER"),
                                               getenv("HBNB_MYSQL_PWD"),
                                               getenv("HBNB_MYSQL_HOST"),
                                               getenv("HBNB_MYSQL_DB")),
                                       pool_pre_ping=True)
 
-        if getenv(HBNB_ENV) == 'test':
+        if getenv("HBNB_ENV") == 'test':
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
