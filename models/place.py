@@ -58,8 +58,24 @@ class Place(BaseModel, Base):
             """Get reviews """
             from models import storage
             reviews = []
-            all_reviews = storage.all(Review)
+            all_reviews = models.storage.all(Review)
             for value in all_reviews.values():
                 if value.place_id == self.id:
                     reviews.append(value)
             return reviews
+
+        @amenties@setter
+        def amenities(self, value):
+            if type(value) == Amenity:
+                self.amenity_ids.append(value.id)
+
+        @property
+        def amenities(self):
+            """
+            """
+            amenities = []
+            all_amenities = models.storage.all(Amenity)
+            for amenity in all_amenities.values():
+                if amenity.id in self.amenity_ids:
+                    amenities.append(amenity)
+            return amenities
