@@ -4,9 +4,19 @@ from models.base_model import BaseModel
 from models.base_model import Base
 from models.review import Review
 from models.amenity import Amenity
-from sqlalchemy import Column, String, ForeignKey, Float, Integer
+from sqlalchemy import Column, String, ForeignKey, Float, Integer, Table
 from sqlalchemy.orm import relationship
 from os import getenv
+import models
+
+
+table = Table("place_amenity", Base.metadata,
+              Column("place_id", String(60),
+                     ForeignKey("place.id"),
+                     primary_key=True, nullable=False),
+              Column("amenity_id", String(60),
+                     ForeignKey("amenities.id"),
+                     primary_key=True, nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -37,16 +47,19 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     amenity_ids = []
-    _amenities = relationship('Amenity', secondary='place_amenity',
-                              viewonly=False, back_populates="place_amenities")
 
-    @property
-    def reviews(self):
-        """Get reviews """
-        from models import storage
-        reviews = []
-        all_reviews = storage.all(Review)
-        for value in all_reviews.values():
-            if value.place_id == self.id:
-                reviews.append(value)
-        return reviews
+    if getenv("HBNB_TYPE_STORAGE") == "db":
+        amenities = relationship("Amenity", secondary="place_amenity",
+                                 viewonly="False")
+        reviews = relationship("Review", backref="place", cascade='delete')
+    else:
+        @property
+        def reviews(self):
+            """Get reviews """
+            from models import storage
+            reviews = []
+            all_reviews = storage.all(Review)
+            for value in all_reviews.values():
+                if value.place_id == self.id:
+                    reviews.append(value)
+            return reviews
