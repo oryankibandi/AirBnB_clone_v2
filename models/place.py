@@ -57,7 +57,7 @@ class Place(BaseModel, Base):
         Returns list of amenities
         """
         return self._amenities
-
+"""
     @amenities.setter
     def amenities(self, value):
         """
@@ -76,3 +76,5 @@ class Place(BaseModel, Base):
                 if val.id in self.amenity_ids:
                     amen.append(val)
             self._amenities = amen
+
+"""
