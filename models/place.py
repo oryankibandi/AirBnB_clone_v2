@@ -50,31 +50,3 @@ class Place(BaseModel, Base):
             if value.place_id == self.id:
                 reviews.append(value)
         return reviews
-
-    @property
-    def amenities(self):
-        """
-        Returns list of amenities
-        """
-        return self._amenities
-"""
-    @amenities.setter
-    def amenities(self, value):
-        """
-        set amenities
-        """
-        if (getenv("HBNB_TYPE_STORAGE") != "db"):
-            try:
-                if (value.type(self).__name__ == "Amenity"):
-                    self.amenity_ids.append(value.id)
-            except Exception:
-                pass
-            from models import storage
-            all_amenities = storage.all(Amenity)
-            amen = []
-            for val in all_amenities.values():
-                if val.id in self.amenity_ids:
-                    amen.append(val)
-            self._amenities = amen
-
-"""
