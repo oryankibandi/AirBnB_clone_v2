@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
+import models
 from models.base_model import BaseModel
 from models.base_model import Base
 from models.review import Review
@@ -7,12 +8,11 @@ from models.amenity import Amenity
 from sqlalchemy import Column, String, ForeignKey, Float, Integer, Table
 from sqlalchemy.orm import relationship
 from os import getenv
-import models
 
 
 table = Table("place_amenity", Base.metadata,
               Column("place_id", String(60),
-                     ForeignKey("place.id"),
+                     ForeignKey("places.id"),
                      primary_key=True, nullable=False),
               Column("amenity_id", String(60),
                      ForeignKey("amenities.id"),
@@ -39,7 +39,7 @@ class Place(BaseModel, Base):
     city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
     user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
     name = Column(String(128), nullable=False)
-    description = Column(String(1024, nullable=True))
+    description = Column(String(1024), nullable=True)
     number_rooms = Column(Integer, default=0, nullable=False)
     number_bathrooms = Column(Integer, default=0, nullable=False)
     max_guest = Column(Integer, default=0, nullable=False)
@@ -64,11 +64,6 @@ class Place(BaseModel, Base):
                     reviews.append(value)
             return reviews
 
-        @amenties@setter
-        def amenities(self, value):
-            if type(value) == Amenity:
-                self.amenity_ids.append(value.id)
-
         @property
         def amenities(self):
             """
@@ -76,6 +71,11 @@ class Place(BaseModel, Base):
             amenities = []
             all_amenities = models.storage.all(Amenity)
             for amenity in all_amenities.values():
-                if amenity.id in self.amenity_ids:
+                if amenity.id == self.amenity_ids:
                     amenities.append(amenity)
             return amenities
+
+        @amenities.setter
+        def amenities(self, value):
+            if type(value) == Amenity:
+                self.amenity_ids.append(value.id)
