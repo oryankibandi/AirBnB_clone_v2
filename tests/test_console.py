@@ -12,27 +12,7 @@ from models.engine.file_storage import FileStorage
 
 
 class TestHBNBCommand(unittest.TestCase):
-    """Test
-    """
-    @classsmethod
-    def setUpClass(cls):
-        """Test set up
-        """
-        try:
-            os.rename("file.json", "make")
-        except IOError:
-            pass
-        cls.HBNB = HBNBCommand()
-
-    @classmethod
-    def tearDownClass(cls):
-        """Test
-        """
-        try:
-            os.rename("make", "file.json")
-        except IOError:
-            pass
-        del cls.HBNB
+    pass
 
 
 if __name__ == "__main__":
