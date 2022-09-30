@@ -10,14 +10,12 @@ class FileStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
-
         if cls is not None:
-            cls_list = {}
-            for key, val in self.__objects.items():
-                if key.split(".")[0] == cls.__name__:
-                    cls_list[key] = val
-            return cls_list
-
+            dic = {}
+            for key, value in FileStorage.__objects.items():
+                if type(value) == cls:
+                    dic[key] = value
+            return dic
         return FileStorage.__objects
 
     def new(self, obj):
@@ -31,6 +29,7 @@ class FileStorage:
             temp.update(FileStorage.__objects)
             for key, val in temp.items():
                 temp[key] = val.to_dict()
+                print(key, val)
             json.dump(temp, f)
 
     def reload(self):
@@ -58,8 +57,12 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
-        """ deletes obj from __objects"""
+        """
+        Delete obj from __objects if it’s inside - if obj is equal to None,
+        the method should not do anything.
+        """
         try:
-            del self.__objects["{}.{}".format(type(obj).__name__, obj.id)]
+            del FileStorage.__objects["{}.{}".format(type(obj).__name__,
+                                                     obj.id)]
         except KeyError:
             pass
