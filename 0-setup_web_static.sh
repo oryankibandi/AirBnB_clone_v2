@@ -3,10 +3,10 @@
 
 sudo mkdir -p /data/
 sudo mkdir -p /data/web_static/
-sudo mkdir -p /data/web_static/releases/ /data/web_static/shared/
+sudo mkdir -p /data/web_static/releases/ /data/web_static/shared/ /data/web_static/current/
 sudo mkdir -p /data/web_static/releases/test/
-sudo mkdir -p /data/web_static/releases/test/index.html
-echo Holberton School > /data/web_static/releases/test/index.html
+sudo touch /data/web_static/releases/test/index.html
+sudo echo Holberton School > /data/web_static/releases/test/index.html
 sudo ls -s /data/web_static/current /data/web_static/releases/test/
 chown -R $USER /data/
 chown -R $USER /data/
@@ -24,8 +24,8 @@ echo "server {
         return 301 http://cuberule.com/;
     }
     location /hbnb_static {
-	alias /data/web_static/current/;
-	autoindex off;
+        alias /data/web_static/current/;
+        autoindex off;
     }
     error_page 404 /404.html;
     location /404 {
