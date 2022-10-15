@@ -35,7 +35,7 @@ class DBStorage:
     def all(self, cls=None):
         """Queries all objects on the current database session"""
         if cls is not None:
-            return session.query(cls).all()
+            return self.__session.query(cls).all()
         else:
             return self.__session.query(User, State, Review,
                                         Place, City, Amenity).all()
@@ -60,3 +60,9 @@ class DBStorage:
                                        expire_on_commit=True)
         Session = scoped_session(session_factory)
         self.__engine = Session()
+
+    def close(self):
+        """
+        calls remove() method on the private session attribute self.__session
+        """
+        self.__session.remove()

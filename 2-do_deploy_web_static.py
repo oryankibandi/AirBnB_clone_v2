@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ generates a .tgz archive from web_static repo"""
 
+
 from fabric.api import *
 from datetime import datetime
 import os
