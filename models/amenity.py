@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
-from models.base_model import BaseModel, Base
+from models.base_model import BaseModel
 from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
 
 
-class Amenity(BaseModel, Base):
+class Amenity(BaseModel):
     """
     Defines the Amenities class
     Attributes:

@@ -21,6 +21,15 @@ def get_cities():
     states = storage.all(state)
     return render_template('8-cities_by_states.html', states=states)
 
+@app.route('/states/<id>')
+def get_state(id):
+    states = storage.all(state)
+    state = None;
+    for item in states:
+        if item.id == id:
+            state = item
+    return render_template('9-states.html', state=state)
+
 
 @app.teardown_appcontext
 def teardown():
